@@ -55,7 +55,7 @@ ch_ivar_variants_header_mqc = file("$projectDir/assets/headers/ivar_variants_hea
 //
 // MODULE: Loaded from modules/local/
 //
-include { CUTADAPT } from '../modules/local/cutadapt'
+include { CUTADAPT } from '../modules/local/cutadapt_ev'
 include { MULTIQC  } from '../modules/local/multiqc_illumina'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_GENOME   } from '../modules/local/plot_mosdepth_regions'
 include { PLOT_MOSDEPTH_REGIONS as PLOT_MOSDEPTH_REGIONS_AMPLICON } from '../modules/local/plot_mosdepth_regions'
@@ -602,8 +602,9 @@ workflow ILLUMINA {
     //
     // SUBWOKFLOW: ENTERO_PITYPE enterovirus processing
     //
+    CUTADAPT.out.reads.view()
     ENTERO_PITYPE(
-        ch_variants_fastq, 
+        CUTADAPT.out.reads, 
         ASSEMBLY_SPADES.out.contigs
     )
 
