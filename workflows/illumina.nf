@@ -75,6 +75,7 @@ include { ASSEMBLY_UNICYCLER      } from '../subworkflows/local/assembly_unicycl
 include { ASSEMBLY_MINIA          } from '../subworkflows/local/assembly_minia'
 include { BAM_TRIM_PRIMERS_IVAR   } from '../subworkflows/local/bam_trim_primers_ivar'
 include { FASTQ_TRIM_FASTP_FASTQC } from '../subworkflows/local/fastq_trim_fastp_fastqc'
+include { ENTERO_PITYPE           } from '../subworkflows/local/entero_pitype'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -534,8 +535,7 @@ workflow ILLUMINA {
     ch_cutadapt_multiqc = Channel.empty()
     if (params.protocol == 'amplicon' && !params.skip_assembly && !params.skip_cutadapt) {
         CUTADAPT (
-            ch_assembly_fastq,
-            PREPARE_GENOME.out.primer_fasta
+            ch_assembly_fastq
         )
         ch_assembly_fastq   = CUTADAPT.out.reads
         ch_cutadapt_multiqc = CUTADAPT.out.log
@@ -598,6 +598,14 @@ workflow ILLUMINA {
         ch_minia_quast_multiqc = ASSEMBLY_MINIA.out.quast_tsv
         ch_versions            = ch_versions.mix(ASSEMBLY_MINIA.out.versions)
     }
+
+    //
+    // SUBWOKFLOW: ENTERO_PITYPE enterovirus processing
+    //
+    ENTERO_PITYPE(
+        ch_variants_fastq, 
+        ASSEMBLY_SPADES.out.contigs
+    )
 
     //
     // MODULE: Pipeline reporting
