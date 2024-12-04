@@ -26,7 +26,7 @@ process FILTER_CONTIGS {
     filter_contigs.py \\
         -i ${contigs} \\
         -l 100 \\
-        -c 1000
+        -c 100
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

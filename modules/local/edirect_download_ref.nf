@@ -1,5 +1,5 @@
 process EDIRECT_DOWNLOAD_REF {
-    tag "$meta.id"
+    //tag "$meta.id"
     label 'process_low'
 
     conda "conda-forge::python=3.9.5"

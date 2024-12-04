@@ -1,5 +1,5 @@
 process IVAR_CONSENSUS {
-    tag "$meta.id"
+    tag "$meta.id $fasta"
     label 'process_medium'
 
     conda "bioconda::ivar=1.4"
@@ -9,7 +9,7 @@ process IVAR_CONSENSUS {
 
     input:
     tuple val(meta), path(bam)
-    path fasta
+    tuple val(meta), path(fasta)
     val save_mpileup
 
     output:
@@ -22,8 +22,8 @@ process IVAR_CONSENSUS {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
-    def args2 = task.ext.args2 ?: ''
+    def args = task.ext.args ?: '-t 0.6 -q 20 -m 10 -n N'
+    def args2 = task.ext.args2 ?: '--count-orphans --no-BAQ --max-depth 0 --min-BQ 0'
     def prefix = task.ext.prefix ?: "${meta.id}"
     def mpileup = save_mpileup ? "| tee ${prefix}.mpileup" : ""
     """

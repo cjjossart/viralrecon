@@ -29,14 +29,9 @@ process BOWTIE2_ALIGN {
 
     def unaligned = ""
     def reads_args = ""
-    if (meta.single_end) {
-        unaligned = save_unaligned ? "--un-gz ${prefix}.unmapped.fastq.gz" : ""
-        reads_args = "-U ${reads}"
-    } else {
-        unaligned = save_unaligned ? "--un-conc-gz ${prefix}.unmapped.fastq.gz" : ""
-        reads_args = "-1 ${reads[0]} -2 ${reads[1]}"
-    }
-
+    unaligned = save_unaligned ? "--un-conc-gz ${prefix}.unmapped.fastq.gz" : ""
+    reads_args = "-1 ${reads[0]} -2 ${reads[1]}"
+    
     def samtools_command = sort_bam ? 'sort' : 'view'
 
     """

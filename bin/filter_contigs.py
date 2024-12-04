@@ -33,7 +33,7 @@ def parse_args(args=None):
         "--min_coverage",
         type=float,
         dest="MIN_COVERAGE",
-        default=1000,
+        default=100,
         help='minimum coverage for filtering'
     )
     return parser.parse_args(args)

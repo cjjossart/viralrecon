@@ -19,11 +19,11 @@ process BOWTIE2_BUILD {
 
     script:
     def args = task.ext.args ?: ''
-    //def index_dir = task.ext.index_dir ?: "bowtie2/${meta}"
-    //def prefix = task.ext.prefix ?: "${meta.id}"
+    def index_dir = task.ext.index_dir ?: "bowtie2/${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    mkdir bowtie2_${meta}_index
-    bowtie2-build $args --threads $task.cpus -f ${fasta} bowtie2_${meta}_index/${fasta.baseName}
+    mkdir bowtie2_${prefix}_index
+    bowtie2-build $args --threads $task.cpus -f ${fasta} bowtie2_${prefix}_index/${fasta.baseName}
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         bowtie2: \$(echo \$(bowtie2 --version 2>&1) | sed 's/^.*bowtie2-align-s version //; s/ .*\$//')

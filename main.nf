@@ -54,7 +54,8 @@ WorkflowMain.initialise(workflow, params, log)
 */
 
 if (params.platform == 'illumina') {
-    include { ILLUMINA } from './workflows/illumina'
+    include { ILLUMINA      } from './workflows/illumina'
+    include { ENTERO_PITYPE } from './subworkflows/local/entero_pitype'
 } else if (params.platform == 'nanopore') {
     include { NANOPORE } from './workflows/nanopore'
 }

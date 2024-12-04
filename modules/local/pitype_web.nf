@@ -1,5 +1,5 @@
 process PITYPE_WEB {
-    //tag "$meta.id"
+    tag "$meta.id"
     label 'process_low'
 
     conda "conda-forge::python=3.9.5"
@@ -8,7 +8,7 @@ process PITYPE_WEB {
         'cjjossart/pitype-web:latest' }"
 
     input:
-    tuple val(sample), val(contig), val(length), val(coverage), val(sequence)
+    tuple val(meta), val(contig), val(length), val(coverage), val(sequence)
 
     output:
     // Tuple with id, csv files,
@@ -22,10 +22,11 @@ process PITYPE_WEB {
     task.ext.when == null || task.ext.when
 
     script: // This script is bundled with the pipeline, in nf-core/viralrecon/bin/
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     pitype_web.py \\
         -q ${sequence} \\
-        -s ${sample} \\
+        -s ${prefix} \\
         -c ${contig}
 
     cat <<-END_VERSIONS > versions.yml
